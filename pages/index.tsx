@@ -35,7 +35,7 @@ const IndexPage = () => {
             getCandle({ variables: { exchange: 'Binance', symbol: search.toUpperCase() } })
           }
         >
-          Search
+          Search symbol
         </Button>
       </HStack>
       <SymbolInfoGrid symbolInfos={candles} />
