@@ -12,7 +12,7 @@ const Configs = (props: Props) => {
   });
   return (
     <SimpleSidebarLayout>
-      <div>Configs</div>
+      <h1>Configs</h1>
       {loading ? <p>Loading...</p> : <pre>{JSON.stringify(data, null, 2)}</pre>}
     </SimpleSidebarLayout>
   );
