@@ -4,6 +4,7 @@ import Layout from '../components/Layout'
 const AboutPage = () => (
   <Layout title="About | Next.js + TypeScript Example">
     <h1>About</h1>
+    <p>C-Dash shows the state of your crypto bots.</p>
     <p>This is the about page</p>
     <p>
       <Link href="/">
