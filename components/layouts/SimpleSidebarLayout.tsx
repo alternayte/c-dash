@@ -19,6 +19,7 @@ import {
 } from '@chakra-ui/react';
 import React, { ReactNode } from 'react';
 import { FiMenu, FiBell, FiChevronDown } from 'react-icons/fi';
+import packageInfo from '../../package.json';
 import HeaderNav from './HeaderNav';
 import SidebarContent from './SidebarContent';
 
@@ -38,6 +39,17 @@ const SimpleSidebarLayout = ({ children, title = 'C-Dash' }: Props) => {
 
       <Box ml={{ base: 0, md: 20 }} p='4'>
         {children}
+        <Box
+          as='footer'
+          mt='8'
+          pt='4'
+          borderTopWidth='1px'
+          borderTopColor={useColorModeValue('gray.200', 'gray.700')}
+        >
+          <Text fontSize='sm' color={useColorModeValue('gray.600', 'gray.400')}>
+            v{packageInfo.version}
+          </Text>
+        </Box>
       </Box>
     </Box>
   );
