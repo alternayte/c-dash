@@ -24,21 +24,21 @@ const options = {
 
 type Props = {
   data: KLineData[];
-  moreData?: KLineData[];
   subscribeToMoreCandles: () => void;
+  chart?: Chart;
 };
-const CandleChart = ({ data, moreData = [], subscribeToMoreCandles }: Props) => {
-  const [chart, setChart] = React.useState<Chart>(null);
+const CandleChart = ({ data, chart, subscribeToMoreCandles }: Props) => {
+  //const [chart, setChart] = React.useState<Chart>(null);
   useEffect(() => {
     console.log('data length', data.length);
     subscribeToMoreCandles();
-    const chart = init(CHART_ID, options);
-    chart.applyNewData(data);
+    //const chart = init(CHART_ID, options);
+    //chart?.applyNewData(data);
 
-    setChart(chart);
+    //setChart(chart);
 
     return () => {
-      dispose(CHART_ID);
+      //dispose(chart);
     };
   }, []);
   return (
