@@ -3,8 +3,9 @@
 // example, to import the interface below do:
 //
 // import { User } from 'path/to/interfaces';
+export * from './atmos';
 
 export type User = {
-  id: number
-  name: string
-}
+  id: number;
+  name: string;
+};
