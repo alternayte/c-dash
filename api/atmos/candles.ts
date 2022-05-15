@@ -28,3 +28,17 @@ export const CANDLES_SUBSCRIPTION = gql`
     }
   }
 `;
+
+export const LATEST_CANDLE = gql`
+  query GetCandles($exchange: ExchangeType!, $symbol: String!) {
+    candles(exchange: $exchange, symbol: $symbol, take: 1, order_by: "DESC") {
+      open
+      high
+      low
+      close
+      time
+      baseVolume
+      quoteVolume
+    }
+  }
+`;

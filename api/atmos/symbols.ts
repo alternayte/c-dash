@@ -7,6 +7,7 @@ export const SYMBOLS = gql`
       exchange: $exchange
       where: { status: { equals: "TRADING" }, symbol: { endsWith: "USDT" } }
     ) {
+      id
       symbol
       baseAsset
       quoteAsset

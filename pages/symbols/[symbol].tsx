@@ -1,5 +1,6 @@
 import { CANDLES, CANDLES_SUBSCRIPTION } from '@/api/atmos/candles';
 import CandleChart from '@/components/charts/CandleChart';
+import SimpleSidebarLayout from '@/components/layouts/SimpleSidebarLayout';
 import { CandleOHLCV, CandleResults, CandleSubscriptionResult } from '@/interfaces/atmos';
 import { useQuery } from '@apollo/client';
 import { Skeleton } from '@chakra-ui/react';
@@ -11,6 +12,9 @@ import React, { useEffect, useState } from 'react';
 const CHART_ID = 'candle-chart';
 
 const options = {
+  grid: {
+    show: false,
+  },
   candle: {
     tooltip: {
       labels: ['T: ', 'O: ', 'C: ', 'H: ', 'L: ', 'V: '],
@@ -46,8 +50,6 @@ const SymbolDetail = (props: Props) => {
   useEffect(() => {
     const chart = init(CHART_ID, options);
     setChart(chart);
-    console.log('setting chart', klines);
-
     return () => {
       dispose(CHART_ID);
     };
@@ -65,26 +67,13 @@ const SymbolDetail = (props: Props) => {
           volume: Number(baseVolume),
         };
       });
-      //console.log('use effect klines');
       setKlines(klineData);
       setHasLoaded(true);
-      // console.log(chart);
-      // if (chart) {
-      //   //const chart = init(CHART_ID, options);
-      //   chart?.applyNewData(klineData);
-      //   //setChart(chart);
-      // }
-      console.log('use effect klines', klineData);
     }
-
-    // return () => {
-    //   second
-    // }
   }, [data]);
 
   useEffect(() => {
     if (chart) {
-      console.log('use effect chart');
       chart.applyNewData(klines);
       const subToMore = () =>
         subscribeToMore<CandleSubscriptionResult>({
@@ -92,8 +81,6 @@ const SymbolDetail = (props: Props) => {
           variables: { exchange: 'Binance', symbol: 'ETHUSDT' },
           updateQuery: (prev, { subscriptionData }) => {
             if (!subscriptionData.data) return prev;
-            console.log('updateQuery triggered');
-            console.log(subscriptionData);
             const {
               ohlcv: { open, high, low, close, time, baseVolume, quoteVolume },
             } = subscriptionData.data;
@@ -106,15 +93,9 @@ const SymbolDetail = (props: Props) => {
               baseVolume,
               quoteVolume,
             };
-            //const newCandle = subscriptionData.data.candles[0];
-            console.log('prev result');
-            console.log(prev);
-            // check prev.candles is an array
 
-            console.log(Object.keys(prev.candles).length);
             if (!prev.candles) return prev;
             const newCandles = [...prev.candles, newCandle];
-            console.log('new candle added');
 
             const newKline = {
               timestamp: new Date(time).getTime(),
@@ -125,43 +106,28 @@ const SymbolDetail = (props: Props) => {
               volume: Number(baseVolume),
             };
             setKlines((prevKlines) => [...prevKlines, newKline]);
-            console.log(chart);
-            chart.applyNewData(klines);
+            chart.updateData(newKline);
 
             return {
               candles: newCandles,
             };
           },
         });
-      subToMore();
+      //subToMore();
+      chart.createTechnicalIndicator({ name: 'RSI', calcParams: [14] }, false, { id: 'rsi' });
+      // chart.createTechnicalIndicator('MA', true, { id: 'candle_pane' });
+      chart.createTechnicalIndicator('MACD', true, { id: 'MACD' });
     }
   }, [chart]);
-
-  useEffect(() => {
-    if (chart) {
-      console.log('use effect chart kline update');
-      chart.applyNewData(klines);
-    }
-  }, [klines]);
-
-  // const memoizedSubscribeToMore = React.useCallback(() => );
-  // }, [subscribeToMore]);
 
   if (loading) return <Skeleton />;
   if (error) {
     console.error(error);
     return <p>Error :(</p>;
   }
-  // if (!chart) {
-  //   return <p>Chart not ready</p>;
-  // }
-  // if (data.candles) {
-  //   //const { candles } = data;
-  //   console.log(data.candles);
-  // }
 
   return (
-    <>
+    <SimpleSidebarLayout>
       <div>SymbolDetail: {parsedSymbol}</div>
       <Skeleton isLoaded={!loading && klines.length > 0}>
         <div id={CHART_ID} style={{ height: 600 }}>
@@ -169,7 +135,7 @@ const SymbolDetail = (props: Props) => {
         </div>
         {/* <CandleChart chart={chart} subscribeToMoreCandles={memoizedSubscribeToMore} data={klines} /> */}
       </Skeleton>
-    </>
+    </SimpleSidebarLayout>
   );
 };
 

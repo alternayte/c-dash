@@ -1,4 +1,5 @@
 export type SymbolPair = {
+  id: string;
   symbol: string;
   baseAsset: string;
   quoteAsset: string;

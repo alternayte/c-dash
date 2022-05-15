@@ -11,10 +11,10 @@ interface LinkItemProps {
 }
 const LinkItems: Array<LinkItemProps> = [
   { name: 'Home', icon: FiHome, href: '/' },
-  { name: 'Trending', icon: FiTrendingUp, href: '/trending' },
+  { name: 'Trending', icon: FiTrendingUp, href: '/symbols/ETHUSDT' },
   { name: 'Explore', icon: FiCompass, href: '/explore' },
   { name: 'Favourites', icon: FiStar, href: '/favourites' },
-  { name: 'Settings', icon: FiSettings, href: '/settings' },
+  { name: 'Configs', icon: FiSettings, href: '/configs' },
 ];
 
 interface Props extends BoxProps {
@@ -27,20 +27,20 @@ const SidebarContent = ({ onClose, ...rest }: Props) => {
       bg={useColorModeValue('white', 'gray.900')}
       borderRight='1px'
       borderRightColor={useColorModeValue('gray.200', 'gray.700')}
-      w={{ base: 'full', md: 60 }}
+      w={{ base: 'full', md: 20 }}
       pos='fixed'
       h='full'
       {...rest}
     >
       <Flex h='20' alignItems='center' mx='8' justifyContent='space-between'>
-        <Text fontSize='2xl' fontFamily='monospace' fontWeight='bold'>
+        {/* <Text fontSize='2xl' fontWeight='bold'>
           Logo
-        </Text>
+        </Text> */}
         <CloseButton display={{ base: 'flex', md: 'none' }} onClick={onClose} />
       </Flex>
       {LinkItems.map((link) => (
         <NavItem key={link.name} icon={link.icon} href={link.href}>
-          {link.name}
+          {/* {link.name} */}
         </NavItem>
       ))}
     </Box>
