@@ -2,9 +2,9 @@ version: 1
 bootstrap:
   command: npm install -g opencode-ai
 agents:
-  implementer: claude
-  validator: claude
-  reviewer: claude
+  implementer: opencode
+  validator: opencode
+  reviewer: opencode
 sandbox:
   allowedDomains:
     - api.anthropic.com
