@@ -1,20 +1,24 @@
 version: 1
 bootstrap:
-  command: 'curl -fsSL https://opencode.ai/install | bash'
+  # The coding agent, then the dependencies of the app. Both must exist before the Implementer
+  # session starts, because the sandbox denies every domain this file does not name.
+  command: 'curl -fsSL https://opencode.ai/install | bash && npm ci --no-audit --no-fund'
 agents:
   implementer: opencode
   validator: opencode
   reviewer: opencode
 sandbox:
   allowedDomains:
-    - opencode.ai
-    - api.github.com
-    - github.com
-    - objects.githubusercontent.com
+    - opencode.ai                          # the installer and the model API
+    - api.github.com                       # the installer reads the release list
+    - github.com                           # the repository and the release download
+    - objects.githubusercontent.com        # the release redirect target
     - raw.githubusercontent.com            # the installer script
-    - release-assets.githubusercontent.com # the binary download    
-    - registry.npmjs.org
+    - release-assets.githubusercontent.com # the binary download
+    - registry.npmjs.org                   # npm ci, and the opencode plugin install
 verify:
   commands:
-    - name: noop
-      run: 'true'
+    - name: type-check
+      run: 'npm run type-check'
+    - name: test
+      run: 'npm test'
