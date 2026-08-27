@@ -1,4 +1,16 @@
 version: 1
+bootstrap:
+  command: npm install -g opencode-ai
+agents:
+  implementer: claude
+  validator: claude
+  reviewer: claude
+sandbox:
+  allowedDomains:
+    - api.anthropic.com
+    - registry.npmjs.org
+    - api.deepseek.com
+    - opencode.ai
 verify:
   commands:
     - name: noop
