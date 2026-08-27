@@ -11,6 +11,8 @@ sandbox:
     - api.github.com
     - github.com
     - objects.githubusercontent.com
+    - raw.githubusercontent.com            # the installer script
+    - release-assets.githubusercontent.com # the binary download    
 verify:
   commands:
     - name: noop
