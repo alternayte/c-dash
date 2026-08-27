@@ -1,16 +1,16 @@
 version: 1
 bootstrap:
-  command: npm install -g opencode-ai
+  command: 'curl -fsSL https://opencode.ai/install | bash'
 agents:
   implementer: opencode
   validator: opencode
   reviewer: opencode
 sandbox:
   allowedDomains:
-    - api.anthropic.com
-    - registry.npmjs.org
-    - api.deepseek.com
     - opencode.ai
+    - api.github.com
+    - github.com
+    - objects.githubusercontent.com
 verify:
   commands:
     - name: noop
