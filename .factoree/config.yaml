@@ -13,6 +13,7 @@ sandbox:
     - objects.githubusercontent.com
     - raw.githubusercontent.com            # the installer script
     - release-assets.githubusercontent.com # the binary download    
+    - registry.npmjs.org
 verify:
   commands:
     - name: noop
