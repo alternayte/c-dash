@@ -1,6 +1,7 @@
 import React, { ReactNode } from 'react'
 import Link from 'next/link'
 import Head from 'next/head'
+import { version } from '../package.json'
 
 type Props = {
   children?: ReactNode
@@ -33,7 +34,8 @@ const Layout = ({ children, title = 'This is the default title' }: Props) => (
     {children}
     <footer>
       <hr />
-      <span>I'm here to stay (Footer)</span>
+      <span>I'm here to stay (Footer)</span>{' '}
+      <span>v{version}</span>
     </footer>
   </div>
 )
