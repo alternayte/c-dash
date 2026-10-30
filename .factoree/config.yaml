@@ -1,21 +1,21 @@
 version: 1
+identity:
+  product: factoree-test
+  linear:
+    teamKey: FAC
 bootstrap:
-  # The coding agent, then the dependencies of the app. Both must exist before the Implementer
-  # session starts, because the sandbox denies every domain this file does not name.
-  command: 'curl -fsSL https://opencode.ai/install | bash && npm ci --no-audit --no-fund'
+  # The sprite holds no opencode. npm 12 runs no install script, so the bootstrap runs the
+  # opencode postinstall that links the binary. Then it installs the dependencies of the app.
+  command: 'npm install -g --prefix /home/sprite/.local opencode-ai && (cd /home/sprite/.local/lib/node_modules/opencode-ai && node postinstall.mjs) && npm ci --no-audit --no-fund'
 agents:
   implementer: opencode
   validator: opencode
   reviewer: opencode
 sandbox:
   allowedDomains:
-    - opencode.ai                          # the installer and the model API
-    - api.github.com                       # the installer reads the release list
-    - github.com                           # the repository and the release download
-    - objects.githubusercontent.com        # the release redirect target
-    - raw.githubusercontent.com            # the installer script
-    - release-assets.githubusercontent.com # the binary download
-    - registry.npmjs.org                   # npm ci, and the opencode plugin install
+    - registry.npmjs.org # opencode and npm ci
+    - opencode.ai        # the model API
+    - models.dev         # the opencode model list
 verify:
   commands:
     - name: type-check

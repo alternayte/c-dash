@@ -1,0 +1,45 @@
+name: preview
+
+on:
+  pull_request_target:
+    types: [opened, synchronize, reopened, labeled, closed]
+
+permissions:
+  contents: read
+  packages: write
+  pull-requests: write
+
+jobs:
+  preview:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        if: github.event.action != 'closed'
+        with:
+          # pull_request_target runs with the secrets, so the pull request code is checked out by
+          # SHA and never changes this workflow.
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - uses: docker/login-action@v3
+        if: github.event.action != 'closed'
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: docker/build-push-action@v6
+        if: github.event.action != 'closed'
+        with:
+          context: .
+          push: true
+          tags: ghcr.io/${{ github.repository }}:${{ github.event.pull_request.head.sha }}
+
+      - uses: alternayte/kiln/.github/actions/preview@v0.8.0
+        with:
+          url: ${{ vars.KILN_URL }}
+          api-key: ${{ secrets.KILN_API_KEY }}
+          image: ghcr.io/${{ github.repository }}:${{ github.event.pull_request.head.sha }}
+          port: "3000"
+          # Kiln ignores the image command, so this names the server with absolute paths.
+          start: /usr/local/bin/node /app/node_modules/.bin/next start /app -p 3000
+          egress-allow: api.atmosbot.com
