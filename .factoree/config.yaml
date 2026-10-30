@@ -22,3 +22,10 @@ verify:
       run: 'npm run type-check'
     - name: test
       run: 'npm test'
+preview:
+  # Factoree starts this in the check sprite and captures screenshots of visible changes. The
+  # implementer also opens it with agent-browser to check its own work.
+  enabled: true
+  command: 'npm run build && npx next start -p 3000'
+  readyUrl: 'http://localhost:3000/'
+  timeoutSeconds: 600
