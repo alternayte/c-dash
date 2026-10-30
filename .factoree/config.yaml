@@ -14,7 +14,7 @@ agents:
 sandbox:
   allowedDomains:
     - registry.npmjs.org # opencode and npm ci
-    - opencode.ai        # the model API
+    - api.deepseek.com   # the model API (DeepSeek, set by the worker)
     - models.dev         # the opencode model list
 verify:
   commands:
