@@ -35,9 +35,11 @@ jobs:
         with:
           context: .
           push: true
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
           tags: ghcr.io/${{ github.repository }}:${{ github.event.pull_request.head.sha }}
 
-      - uses: alternayte/kiln/.github/actions/preview@v0.9.1
+      - uses: alternayte/kiln/.github/actions/preview@v0.9.4
         with:
           url: ${{ vars.KILN_URL }}
           api-key: ${{ secrets.KILN_API_KEY }}
