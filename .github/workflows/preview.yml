@@ -8,6 +8,7 @@ permissions:
   contents: read
   packages: write
   pull-requests: write
+  deployments: write
 
 concurrency:
   group: preview-${{ github.event.pull_request.number }}
@@ -47,7 +48,7 @@ jobs:
             -d "{\"host\":\"ghcr.io\",\"username\":\"${{ github.actor }}\",\"token\":\"${{ secrets.GITHUB_TOKEN }}\"}" \
             -o /dev/null -w 'registry stored: %{http_code}\n'
 
-      - uses: alternayte/kiln/.github/actions/preview@v0.8.0
+      - uses: alternayte/kiln/.github/actions/preview@v0.9.1
         with:
           url: ${{ vars.KILN_URL }}
           api-key: ${{ secrets.KILN_API_KEY }}
