@@ -37,22 +37,13 @@ jobs:
           push: true
           tags: ghcr.io/${{ github.repository }}:${{ github.event.pull_request.head.sha }}
 
-      # The Kiln host pulls the image, so it needs a ghcr credential. The job token reads this
-      # repository's packages and expires with the job, so nothing long-lived is stored.
-      - name: Give Kiln a pull credential
-        if: github.event.action != 'closed'
-        run: |
-          curl -sS -f -X POST "${{ vars.KILN_URL }}/v1/registries" \
-            -H "Authorization: Bearer ${{ secrets.KILN_API_KEY }}" \
-            -H 'Content-Type: application/json' \
-            -d "{\"host\":\"ghcr.io\",\"username\":\"${{ github.actor }}\",\"token\":\"${{ secrets.GITHUB_TOKEN }}\"}" \
-            -o /dev/null -w 'registry stored: %{http_code}\n'
-
       - uses: alternayte/kiln/.github/actions/preview@v0.9.1
         with:
           url: ${{ vars.KILN_URL }}
           api-key: ${{ secrets.KILN_API_KEY }}
           image: ghcr.io/${{ github.repository }}:${{ github.event.pull_request.head.sha }}
+          # The host pulls with the job token for this build, and stores nothing.
+          registry-token: ${{ github.token }}
           port: "3000"
           # Kiln ignores the image command, so this names the server with absolute paths.
           start: /usr/local/bin/node /app/node_modules/.bin/next start /app -p 3000
