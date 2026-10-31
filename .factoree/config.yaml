@@ -4,9 +4,10 @@ identity:
   linear:
     teamKey: FAC
 bootstrap:
-  # The sprite holds no opencode. npm 12 runs no install script, so the bootstrap runs the
-  # opencode postinstall that links the binary. Then it installs the dependencies of the app.
-  command: 'npm install -g --prefix /home/sprite/.local opencode-ai && (cd /home/sprite/.local/lib/node_modules/opencode-ai && node postinstall.mjs) && npm ci --no-audit --no-fund'
+  # A Fly Sprite holds no opencode, so the bootstrap installs it in the user's home. npm 12 runs
+  # no install script, so the bootstrap runs the opencode postinstall that links the binary. The
+  # Factoree sandbox image on Kiln already holds opencode, so the install is skipped there.
+  command: 'if ! command -v opencode >/dev/null; then npm install -g --prefix "$HOME/.local" opencode-ai && (cd "$HOME/.local/lib/node_modules/opencode-ai" && node postinstall.mjs); fi && npm ci --no-audit --no-fund'
 agents:
   implementer: opencode
   validator: opencode
