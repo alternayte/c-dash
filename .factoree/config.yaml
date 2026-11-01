@@ -7,9 +7,9 @@ bootstrap:
   # A Fly Sprite holds no opencode, so the bootstrap installs it in the user's home. npm 12 runs
   # no install script, so the bootstrap runs the opencode postinstall that links the binary. The
   # Factoree sandbox image on Kiln already holds opencode, so the install is skipped there.
-  # The production build fills .next/cache, so the warm snapshot holds it and the later builds of
-  # the implementer and the preview are incremental.
-  command: 'if ! command -v opencode >/dev/null; then npm install -g --prefix "$HOME/.local" opencode-ai && (cd "$HOME/.local/lib/node_modules/opencode-ai" && node postinstall.mjs); fi && npm ci --no-audit --no-fund && NEXT_TELEMETRY_DISABLED=1 npm run build'
+  # The bootstrap runs again in every sandbox forked from the warm snapshot. npm ci deletes
+  # node_modules, so it runs only when package-lock.json differs from the snapshot's.
+  command: 'if ! command -v opencode >/dev/null; then npm install -g --prefix "$HOME/.local" opencode-ai && (cd "$HOME/.local/lib/node_modules/opencode-ai" && node postinstall.mjs); fi && h=$(sha256sum package-lock.json | cut -c1-64) && { [ "$(cat node_modules/.lock-sha 2>/dev/null)" = "$h" ] || { npm ci --no-audit --no-fund && echo "$h" > node_modules/.lock-sha; }; }'
 agents:
   implementer: opencode
   validator: opencode
