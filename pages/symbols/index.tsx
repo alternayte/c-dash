@@ -6,7 +6,7 @@ type Props = {};
 const Symbols = (props: Props) => {
   return (
     <>
-      <div>Symbols</div>
+      <h1>Symbols</h1>
       <SymbolsList />
     </>
   );
